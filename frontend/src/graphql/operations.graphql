@@ -1,0 +1,35 @@
+query GetOrders {
+  getOrders {
+    id
+    items
+    status
+    createdAt
+  }
+}
+
+mutation CreateOrder($input: CreateOrderInput!) {
+  createOrder(input: $input) {
+    id
+    items
+    status
+    createdAt
+  }
+}
+
+mutation UpdateOrderStatus($input: UpdateOrderStatusInput!) {
+  updateOrderStatus(input: $input) {
+    id
+    items
+    status
+    createdAt
+  }
+}
+
+subscription OrderUpdated {
+  orderUpdated {
+    id
+    items
+    status
+    createdAt
+  }
+}
