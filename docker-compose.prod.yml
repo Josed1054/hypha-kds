@@ -1,0 +1,47 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: hypha-kds-mongodb
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: ['CMD', 'mongosh', '--eval', 'db.adminCommand("ping")']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+    container_name: hypha-kds-backend
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    environment:
+      PORT: 4000
+      MONGODB_URI: mongodb://mongodb:27017/hypha-kds
+      CORS_ORIGIN: http://localhost:5173
+    command: npm run start
+    ports:
+      - '4000:4000'
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_GRAPHQL_HTTP_URL: http://localhost:4000/graphql
+        VITE_GRAPHQL_WS_URL: ws://localhost:4000/graphql
+    container_name: hypha-kds-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    command: npm run preview -- --host 0.0.0.0 --port 5173
+    ports:
+      - '5173:5173'
+
+volumes:
+  mongodb_data:
