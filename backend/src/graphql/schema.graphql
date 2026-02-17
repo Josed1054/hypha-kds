@@ -1,0 +1,36 @@
+scalar DateTime
+
+enum OrderStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+}
+
+type Order {
+  id: ID!
+  items: [String!]!
+  status: OrderStatus!
+  createdAt: DateTime!
+}
+
+type Query {
+  getOrders: [Order!]!
+}
+
+input CreateOrderInput {
+  items: [String!]!
+}
+
+input UpdateOrderStatusInput {
+  id: ID!
+  status: OrderStatus!
+}
+
+type Mutation {
+  createOrder(input: CreateOrderInput!): Order!
+  updateOrderStatus(input: UpdateOrderStatusInput!): Order!
+}
+
+type Subscription {
+  orderUpdated: Order!
+}
