@@ -1,6 +1,7 @@
 # Hypha KDS Challenge (Full-Stack)
 
 Kitchen Display System (KDS) demo built with:
+
 - Backend: Node.js + Express + Apollo GraphQL + TypeScript + MongoDB + GraphQL subscriptions (`graphql-ws`)
 - Frontend: React + TypeScript + Apollo Client + TanStack Router + Tailwind CSS v4 + shadcn/ui
 - Infra: Docker + Docker Compose
@@ -59,6 +60,7 @@ hypha-kds-challenge/
 ## Run with Docker (Primary)
 
 ### Prerequisites
+
 - Docker Engine/Desktop
 - Docker Compose plugin (`docker compose`)
 
@@ -67,25 +69,25 @@ hypha-kds-challenge/
 First run:
 
 ```bash
-docker compose up --build
+docker-compose up --build
 ```
 
 Subsequent runs:
 
 ```bash
-docker compose up
+docker-compose up
 ```
 
 Stop services:
 
 ```bash
-docker compose down
+docker-compose down
 ```
 
 Restart backend/frontend after dependency or env changes:
 
 ```bash
-docker compose restart backend frontend
+docker-compose restart backend frontend
 ```
 
 This mode uses `docker-compose.yml` and applies source changes from `backend/src` and `frontend/src` without rebuilding images.
@@ -93,12 +95,13 @@ This mode uses `docker-compose.yml` and applies source changes from `backend/src
 ### Production-like mode (immutable images)
 
 ```bash
-docker compose -f docker-compose.prod.yml up --build
+docker-compose -f docker-compose.prod.yml up --build
 ```
 
 This mode uses `docker-compose.prod.yml` and runs immutable built images (source edits do not reflect until rebuild).
 
 ### URLs
+
 - Frontend: [http://localhost:5173](http://localhost:5173)
 - Frontend routes:
   - [http://localhost:5173/main](http://localhost:5173/main)
@@ -189,6 +192,7 @@ npm run test
 ```
 
 Covered scenarios:
+
 - `createOrder` success path
 - `createOrder` rejects empty `items`
 - `createOrder` rejects whitespace-only items
@@ -200,6 +204,7 @@ Covered scenarios:
 ## Architecture Notes
 
 Backend is intentionally layered:
+
 1. GraphQL schema (`schema.graphql`)
 2. Resolver layer (`graphql/resolvers/*`)
 3. Service layer (`services/orderService.ts`)
