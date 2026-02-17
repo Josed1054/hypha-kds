@@ -56,37 +56,47 @@ hypha-kds-challenge/
 - Optimistic UI for `updateOrderStatus`
 - Jest tests for `createOrder` resolver and status transition service logic
 
-## Local Development
+## Run with Docker (Primary)
 
 ### Prerequisites
-- Node.js 20+
-- npm 10+
-- MongoDB running locally (or use Docker)
+- Docker Engine/Desktop
+- Docker Compose plugin (`docker compose`)
 
-### 1. Install dependencies
+### Development mode (default, hot reload)
 
-```bash
-npm install
-```
-
-### 2. Configure env files
+First run:
 
 ```bash
-cp backend/.env.example backend/.env
-cp frontend/.env.example frontend/.env
+docker compose up --build
 ```
 
-### 3. Generate GraphQL types
+Subsequent runs:
 
 ```bash
-npm run codegen
+docker compose up
 ```
 
-### 4. Run backend + frontend
+Stop services:
 
 ```bash
-npm run dev
+docker compose down
 ```
+
+Restart backend/frontend after dependency or env changes:
+
+```bash
+docker compose restart backend frontend
+```
+
+This mode uses `docker-compose.yml` and applies source changes from `backend/src` and `frontend/src` without rebuilding images.
+
+### Production-like mode (immutable images)
+
+```bash
+docker compose -f docker-compose.prod.yml up --build
+```
+
+This mode uses `docker-compose.prod.yml` and runs immutable built images (source edits do not reflect until rebuild).
 
 ### URLs
 - Frontend: [http://localhost:5173](http://localhost:5173)
@@ -98,39 +108,25 @@ npm run dev
 - GraphQL HTTP endpoint: [http://localhost:4000/graphql](http://localhost:4000/graphql)
 - GraphQL WS endpoint: `ws://localhost:4000/graphql`
 
-## Podman Compose Modes
+## Podman Compose (Secondary)
 
-### Development Mode (hot reload, default)
-
-First run:
+Use the same flow as Docker, replacing `docker compose` with `podman-compose`.
 
 ```bash
 podman-compose up --build
-```
-
-Subsequent runs:
-
-```bash
 podman-compose up
-```
-
-### Production-like Mode (immutable images)
-
-```bash
 podman-compose -f docker-compose.prod.yml up --build
 ```
 
-Ports in both modes:
-- Frontend: `5173`
-- Backend: `4000`
-- MongoDB: `27017`
+## Contributor Commands (Optional)
 
-Behavior notes:
-- Source changes in `backend/src` and `frontend/src` auto-apply in development mode (no image rebuild needed).
-- Changes to `package.json`, `.env`, or `VITE_*` values require container restart:
-  - `podman-compose restart backend frontend`
-- Dockerfile or base image changes still require rebuild:
-  - `podman-compose up --build`
+These are maintenance/verification commands and not required to run the app.
+
+```bash
+npm run codegen
+npm run test
+npm run build
+```
 
 ## GraphQL Examples
 
